@@ -1,0 +1,34 @@
+HOMEWORK 1
+
+
+```{r}
+install.packages("tidyr")
+library(tidyr)
+library(dplyr)
+
+H <- round(runif(25,min = 160,max = 200),1) 
+MatrizHomework <- matrix(H,nrow = 5,ncol = 5)
+
+colnames(MatrizHomework) = c("Enero","Febrero","Marzo","Abril","Mayo")
+fname <- c("LISA","BART","HOMERO","MARGE","SEYMOUR","PATY","EDNA","TROY","NICK","LIONEL")
+lname <- c("SIMPSON","ALEGRIA","BOUVIER","BURNS","FLANDERS","KRABAPPEL","WOLFCASTLE","HIBBERT","SKINNER","SMITHERS")
+rfname <- sample(fname,8,replace = F)
+rlname <- sample(lname,8,replace = F)
+nombre <- sample(rfname,5)
+apellido <- sample(rlname,5)
+ncompleto <- data.frame(nombre,apellido)
+nombrecompleto <- ncompleto%>% unite(nombre,apellido,col=PACIENTE,sep = " ",remove = FALSE)%>%
+nombrecompleto[,1]
+NombrePaciente <- nombrecompleto[,1]
+
+rownames(MatrizHomework) = c(NombrePaciente) 
+MatrizHomework
+apply(MatrizHomework,1,mean)
+PesoPromedioPersona <- apply(MatrizHomework,1,mean)
+apply(MatrizHomework,2,mean)
+PesoPromedioMes <- apply(MatrizHomework,2,mean)
+MatrizconPesoMes=rbind(MatrizHomework,PesoPromedioMes)
+MatrizFinal=cbind(MatrizconPesoMes,PesoPromedioPersona)
+MatrizFinal
+
+```
