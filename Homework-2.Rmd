@@ -1,0 +1,145 @@
+---
+title: "HOMEWORK 2"
+output: html_notebook
+author: "ErwinNavarro"
+
+---
+
+Funciones en R
+
+Una función permite escribir un fragmento de código parametrizado. De esta forma, es posible escribir un bloque de código y ejecutarlo para distintos datos. Una función puede considerarse un subprograma que resuelve una subtarea. Un motivo para utilizar funciones es que permiten estructurar u organizar el código de un programa. Cuando hay que resolver un problema complejo, en lugar de intentar solucionarlo mediante un programa muy extenso es mejor descomponerlo en subproblemas. Los subproblemas deben tener una complejidad moderada, de forma que sean resueltos por subprogramas (como las funciones) sencillos. Así, en lugar de utilizar un programa muy grande para resolver un problema complejo se emplean distintos subprogramas que resuelven tareas sencillas y que se combinan para producir una solución final más simple.
+
+Estructura de una funcion en R
+
+El nombre que asignamos a una función nos permite ejecutarla y hacer referencia a ella. Podemos asignar la misma función a diferentes nombres o cambiar una función a la que ya le hemos asignado un nombre. Es recomendable elegir nombres claros y descriptivos, no ambiguos.
+Una vez que la función tiene nombre, podemos llamarla usando su nombre, al igual que con las funciones por defecto de R.
+
+Los argumentos son las variables que necesita la función para realizar sus operaciones. Aparecen entre paréntesis, separados por comas. Los valores son asignados al nombre del argumento por el usuario cada vez que ejecuta una función. Esto permite que usemos nuestras funciones en distintas situaciones con diferentes datos y especificaciones.
+Los argumentos pueden ser datos, estructuras de datos, conexiones a archivos u otras funciones y todos deben tener nombres diferentes.
+
+El cuerpo de la función contiene, entre llaves, todas las operaciones que se ejecutarán cuando la función sea llamada. El cuerpo de una función puede ser tan sencillo o complejo como nosotros deseemos, incluso podemos definir funciones dentro de una función (y definir funciones dentro de una función dentro de otra función, aunque esto se vuelve confuso rápidamente).
+
+
+Ejemplo de funcion
+```{r}
+#AREA DE UN RECTANGULO
+
+#Sabemos que el área de un rectangulo es lado1 * lado2
+#    _________
+#   |         |
+#   |         | lado1
+#   |_________|
+#     lado2
+
+
+#volviendolo una función
+area_cuad <- function(lado1, lado2) {
+  lado1*lado2
+}
+    
+#Nombre: area_cuad
+#Argumentos: lado1, lado2. Estos son los datos que necesita la función para calcular el área
+#Cuerpo: la operación lado1*lado2    
+      
+area_cuad(lado1 = 5, lado2 = 6)
+area_cuad(5,6)
+area_cuad(2,3)
+
+#Funcion dentro de una función
+      
+precio_area = function(lado1,lado2,precio){
+  area_cuad(lado1,lado2)*precio
+}
+
+precio_area(2,3,20)
+
+plot(cars)
+```
+
+
+
+
+
+
+ARGUMENTOS DE UNA FUNCIÓN
+
+Los argumentos son las variables que necesita la función para realizar sus operaciones. Aparecen entre paréntesis, separados por comas. Los valores son asignados al nombre del argumento por el usuario cada vez que ejecuta una función.
+
+Cuando estamos escribiendo una función en R tenemos que definir los argumentos que contiene. Si esos argumentos son cuantitativos o numéricos, a no ser que estén restringidos por una condición, pueden tomar cualquier valor. Pero si el argumento que estamos escribiendo solo puede adquirir un número finito de categorías, tenemos que acotar sus valores
+
+
+```{r}
+
+```
+
+FAMILIA APPLY
+
+Las funciones de la familia apply en R son un conjunto bien conocido de funciones vectorizadas de R que permiten realizar tareas complejas sobre arrays evitando el uso de bucles for
+
+El comando apply en R permite aplicar una función a través de una matriz, array o data frame. Puedes hacer esto de varias maneras, dependiendo de cómo configures el argumento MARGIN, que habitualmente puede tomar los valores 1, 2 o c(1, 2).
+
+```{r}
+
+apply(X,       # Array, matriz o data frame
+      MARGIN,  # 1: filas, 2: columnas, c(1, 2): filas y columnas
+      FUN,     # Función a ser aplicada
+      ...)     # Argumentos adicionales para ser pasados a FUN
+
+
+df <- data.frame(x = 1:4, y = 5:8, z = 10:13)
+df
+
+apply(X = df, MARGIN = 1, FUN = sum)
+
+#la salida es un vector que contiene la suma correspondiente de cada fila.
+
+#sumatoria para columnas es MARGIN = 2
+
+
+```
+LAPPLY
+
+lapply() es un caso especial de apply() , diseñado para aplicar funciones a todos los elementos de una lista. La l de su nombre se refiere, precisamente, a lista. lapply() intentará coercionar a una lista el objeto que demos como argumento y después aplicará una función a todos sus elementos.
+
+```{r}
+
+lapply(X,   # Lista o vector
+       FUN, # Función a ser aplicada
+       ...) # Argumentos adicionales para ser pasados a FUN
+
+a <- list(A = c(8, 9, 7, 5),
+          B = data.frame(x = 1:5, y = c(5, 1, 0, 2, 3)))
+
+a
+
+#función sum a la lista anterior se obtendrá la suma de cada uno de sus elementos (la suma de los elementos del vector y la suma de los elementos del data frame)
+
+lapply(a, sum)
+
+```
+Las funciones lapply y sapply son muy similares, ya que la primera es un wrapper de la segunda. La principal diferencia entre ambas funciones es que lapply devuelve una lista en lugar de un array. Sin embargo, si estableces simplify = FALSE en la función sapply ambas devolverán una lista.
+
+```{r}
+
+c <- list(A = c(56, 12, 57, 24), B = c(89, 12, 64, 18, 65, 76))
+
+lapply(c(4, 9, 16), FUN = sqrt)
+
+sapply(c(4, 9, 16), FUN = sqrt)
+sapply(c(4, 9, 16), FUN = sqrt, simplify = FALSE)
+
+
+```
+vapply
+
+Devuelve un vector con la longitud que tiene cada una de las listas introducidas como parámetro
+
+```{r}
+
+x <- list(E = 1, D = 1:3, G = 1:7)
+x
+
+vapply(x, FUN = length, FUN.VALUE = 0L)
+
+```
+
