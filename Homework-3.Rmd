@@ -1,0 +1,115 @@
+---
+title: "HOMEWORK-3"
+output: html_notebook
+---
+
+Importar .csv en R
+Para leer archivos de texto separado por comas (.csv) existe la función read.csv(). Esta función la encuentras en R por defecto. No hay necesidad de librerías externas.
+
+El primer argumento de la función read.csv() es la ruta al archivo que quieres importar.
+
+#Podemos usar la ruta completa desde el disco
+mis_datos <- read.csv("C:/la/ruta/completa/a/mis_datos.csv")
+
+#O podemos usar la ruta desde el directorio de trabajo
+mis_datos <- read.csv("ruta/desde/el/directorio/a/mis_datos.csv")
+
+las rutas siempre van entre comillas.
+la extensión (en este caso .csv) del archivo.
+
+EJEMPLO
+mis_datos <- read.csv("C:/la/ruta/completa/a/mis_datos.csv",
+                         header = TRUE,
+                         sep = ",",
+                         stringsAsFactors = FALSE)
+
+
+El argumento header acepta valores lógicos, es decir, TRUE o FALSE. Si la primera fila de tu base de datos representa los nombres de las variables debes escribir TRUE.
+
+El argumento sep acepta valores de tipo carácter (character). Este valor debe ser el carácter que se usa para separar cada celda. Normalmente en los archivos .csv el separador es la coma (","). Si en tu archivo no lo es, puedes intentar con "\t", "" o " ", que representan al tabulador, cualquier cantidad de espacio en blanco, y un sólo espacio en blanco respectivamente.
+
+Si alguna colummna de tus datos contiene valores de texto (cualquier valor que no sea numérico), esa columna se cargará en R como factor automáticamente. Si deseas que no sea así, necesitas colocar como FALSE el argumento stringsAsFactors.
+
+Importar .txt en R
+Para leer archivos de texto plano (.txt) se puede usar la misma función read.csv(). También puedes usar read.table() o read.delim().
+
+Todas estas funciones y sus argumentos funcionan de la misma manera que describimos arriba.
+
+Eso sí, no olvides poner la extensión correcta (.txt) cuando escribas la ruta del archivo.
+
+Importar .xls y .xlsx en R
+La extensión .xls se refiere a los archivos de Microsoft Excel de la versión 1997-2003. Mientras que .xlsx es la extensión de la versión actual.
+
+Ambos se pueden abrir en R, pero se necesita instalar un paquete externo: readxl.
+
+++++++++++++++++++++ dplyr ++++++++++++++++++++++
+
+El paquete dplyr
+Fue desarrollado por Hadley Wickham de RStudio y es un versión optimizada de su paquete plyr. El paquete dplyr no proporciona ninguna nueva funcionalidad a R per se, en el sentido que todo aquello que podemos hacer con dplyr lo podríamos hacer con la sintaxis básica de R.
+
+Una importante contribución del paquete dplyr es que proporciona una "gramática" (particularmente verbos) para la manipulación y operaciones con data frames. Con esta gramática podemos comunicar mediante nuestro código que es lo que estamos haciendo en los data frames a otras personas (asumiendo que conozcan la gramática). Esto es muy útil, ya que proporciona una abstracción que anteriormente no existía. Por último, cabe destacar que las funciones del paquete dplyr son muy rápidas, puesto que están implementadas con el lenguaje C++.
+
+Algunas de los principales "verbos" del paquete dplyr son:
+
+select: devuelve un conjunto de columnas
+filter: devuelve un conjunto de filas según una o varias condiciones lógicas
+arrange: reordena filas de un data frame
+rename: renombra variables en una data frame
+mutate: añade nuevas variables/columnas o transforma variables existentes
+summarise/summarize: genera resúmenes estadísticos de diferentes variables en el data frame, posiblemente con strata
+_%>% : el operador "pipe" es usado para conectar múltiples acciones en una única "pipeline" (tubería)
+
+Función select():
+Permite seleccionar o dejar seleccionar columnas específicas de acuerdo a sus nombres en el orden en el que sean expresados los argumentos de la función inmediatamente siguientes al data frame objetivo que es expresado como primer argumento. Podría establecerse una equivalencia en SQL con la sentencia SELECT.
+
+```{r}
+#LEER ARCHIVO DE TAREA
+#si da error se cambia \ por /
+Votos_Tot <- read.csv("C:/Users/erwin/Downloads/primary_results.csv")
+library(dplyr)
+
+#1 Filtrar todos los votos del estado de Florida
+Votos_Tot %>%
+ filter(state == "Florida")
+
+#2.1  Filtrar votos para los candidatos Hillary Clinton o Donald Trump
+Votos_Tot %>%
+ filter(state == "Florida", candidate == "Donald Trump" | candidate == "Hillary Clinton" )
+
+
+#2.2 Filtrar votos para el partido Demócrata y el condado Shelby
+Votos_Tot %>%
+ filter(party == "Democrat", county == "Shelby" )
+
+#2.3 Filtrar votos para el estado de Alabama y que la cantidad de votos sea mayor a 15000.
+Votos_Tot %>%
+ filter(state == "Alabama", votes >= 1500 )
+
+#3 Filtrar votos para el estado de Texas y el condado Denton, seleccionando
+#únicamente las columnas party, candidate, votes, luego ordene de forma
+#descendente por la columna votes.
+
+Votos_Tot %>%
+ filter(state == "Texas", county == "Denton" ) %>%
+
+   select(party, candidate, votes) %>%
+   arrange(desc(votes))
+ 
+
+#4 Utilice el verbo mutate y arrange para el siguiente filtrado:
+Votos_Tot %>%
+ filter(party == "Republican", candidate == "Ted Cruz", state == "Alaska" ) %>%
+   mutate(vote_count = votes/fraction_votes)%>%
+  arrange(desc(vote_count))
+
+
+plot(cars)
+```
+
+
+
+
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
