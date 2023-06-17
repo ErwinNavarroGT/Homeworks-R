@@ -65,39 +65,38 @@ Permite seleccionar o dejar seleccionar columnas específicas de acuerdo a sus n
 ```{r}
 #LEER ARCHIVO DE TAREA
 #si da error se cambia \ por /
-Votos_Tot <- read.csv("C:/Users/erwin/Downloads/primary_results.csv")
+dataset_results <- read.csv("C:/Users/erwin/Downloads/primary_results.csv")
 library(dplyr)
 
 #1 Filtrar todos los votos del estado de Florida
-Votos_Tot %>%
+dataset_results %>%
  filter(state == "Florida")
 
 #2.1  Filtrar votos para los candidatos Hillary Clinton o Donald Trump
-Votos_Tot %>%
+dataset_results %>%
  filter(state == "Florida", candidate == "Donald Trump" | candidate == "Hillary Clinton" )
 
 
 #2.2 Filtrar votos para el partido Demócrata y el condado Shelby
-Votos_Tot %>%
+dataset_results %>%
  filter(party == "Democrat", county == "Shelby" )
 
 #2.3 Filtrar votos para el estado de Alabama y que la cantidad de votos sea mayor a 15000.
-Votos_Tot %>%
+dataset_results %>%
  filter(state == "Alabama", votes >= 1500 )
 
 #3 Filtrar votos para el estado de Texas y el condado Denton, seleccionando
 #únicamente las columnas party, candidate, votes, luego ordene de forma
 #descendente por la columna votes.
 
-Votos_Tot %>%
+dataset_results %>%
  filter(state == "Texas", county == "Denton" ) %>%
-
    select(party, candidate, votes) %>%
    arrange(desc(votes))
  
 
 #4 Utilice el verbo mutate y arrange para el siguiente filtrado:
-Votos_Tot %>%
+dataset_results %>%
  filter(party == "Republican", candidate == "Ted Cruz", state == "Alaska" ) %>%
    mutate(vote_count = votes/fraction_votes)%>%
   arrange(desc(vote_count))
