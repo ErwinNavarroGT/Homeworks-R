@@ -1,0 +1,92 @@
+---
+title: "HOMEWORK-4"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+Diamond_data <- read.csv("C:/Users/erwin/Downloads/diamonds.csv")
+
+str(Diamond_data)
+
+#1.Dispersión
+
+ggplot(Diamond_data, aes(x=carat, y=price)) +
+ geom_point() 
+
+ggplot(Diamond_data, aes(x=carat, y=price, color=clarity)) +
+ geom_point() 
+
+
+
+plot(cars)
+```
+```{r}
+
+#2.Histograma
+
+ggplot(Diamond_data, aes(x=price)) +
+ geom_histogram(bins=40)
+
+ggplot(Diamond_data, aes(x=price)) +
+ geom_histogram(bins=40)+
+  scale_x_log10()
+
+```
+```{r}
+
+#3.Boxplots
+ggplot(Diamond_data, aes(x=cut, y=price))+
+  geom_boxplot()+
+  scale_y_log10()
+  
+  
+ggplot(Diamond_data, aes(x=cut, y=price, color=cut))+
+  geom_boxplot()+
+  scale_y_log10()
+
+
+```
+```{r}
+#4.Facenting
+
+Filtered_price <- Diamond_data %>%
+  filter(cut == "Good" | cut == "Ideal" | cut == "Premium", price >= 1000) 
+
+Diamond_data %>%
+  filter(cut %in% c("Good","Ideal","Premium"), price >= 1000)
+
+ggplot(Filtered_price, aes(x=cut, y=depth )) +
+         geom_bar(stat = "identity")
+
+ggplot(Filtered_price, aes(x=cut, y=depth, color=clarity)) +
+         geom_bar(stat = "identity")+
+         facet_wrap(~clarity)
+
+ggplot(Filtered_price, aes(x=cut, y=depth)) +
+         geom_bar(stat = "identity", fill = "purple", colour = "green") +
+         facet_wrap(~clarity)
+
+
+```
+```{r}
+
+Median_dimension_diamond <- Diamond_data %>%
+  group_by(cut)%>%
+  summarize(mediaX=sum(x), mediaY=sum(y), mediaZ=sum(z))
+
+
+Cut_premium <- Diamond_data %>%
+  filter(cut=="Premium")%>%
+  group_by(clarity)%>%
+  summarize(minPrice=min(price), maxPrice = max(price))
+  
+  
+ggplot(Cut_premium, aes(x=clarity, y=maxPrice, fill=clarity))+
+  geom_bar(stat = "identity")
+  
+  
+```
+
