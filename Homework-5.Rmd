@@ -1,0 +1,69 @@
+---
+title: "Homework-5"
+output: html_notebook
+Author: Erwin Navarro
+---
+
+
+```{r}
+
+library(tidyverse)
+ Tags <- read_csv("tags.csv")
+ Questions <- read_csv("questions.csv")
+ Question_Tags <- read_csv("question_tags.csv")
+ Answers <- read_csv("answers.csv")
+
+ #parts %>%
+  #count(part_cat_id) %>%
+  #right_join(part_categories, by = c("part_cat_id" = "id"))
+ 
+ #1
+ questions_with_tags <- Questions %>%
+   left_join(Question_Tags, by = c("id" = "question_id")) %>%
+   left_join(Tags, by = c("tag_id"="id"))  
+  
+ questions_with_tags$tag_name[is.na(questions_with_tags$tag_name)] = "only_r"
+ questions_with_tags
+     
+
+ 
+ #2
+ 
+ questions_with_tags %>%
+   group_by(tag_name) %>%
+   summarize(mean_score = mean(score))%>%
+   arrange(desc(mean_score))
+ 
+ 
+ 
+ #3
+ 
+ Questions %>%
+   inner_join(Answers, by = c("id"="question_id"), suffix = c("_question", "_answer")) %>%
+   mutate(gap = creation_date_answer - creation_date_question)
+ 
+ 
+ #4
+Answer_count <- Answers %>%
+   group_by(question_id)%>%
+   count (question_id)%>%
+   arrange(desc(n))
+  
+Questions_Answer_Counts <- Questions %>% 
+ left_join(Answer_count, by = c("id" = "question_id"))
+  
+Questions_Answer_Counts$n[is.na(Questions_Answer_Counts$n)] = 0
+print(Questions_Answer_Counts) 
+
+
+
+5#
+
+Question_Tags %>%
+  inner_join(Questions_Answer_Counts, by = c("question_id" = "id"))%>%
+  inner_join(Tags, by = c("tag_id" = "id"))
+
+ 
+plot(cars)
+```
+
